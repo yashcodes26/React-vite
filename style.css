@@ -1,75 +1,111 @@
-const imageInput = document.getElementById("imageInput");
-const previewImage = document.getElementById("previewImage");
-const generateBtn = document.getElementById("generateBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const captionText = document.getElementById("captionText");
-const loading = document.getElementById("loading");
 
-// Preview uploaded image
-imageInput.addEventListener("change", () => {
-  const file = imageInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      previewImage.src = reader.result;
-      previewImage.style.display = "block";
-    };
-    reader.readAsDataURL(file);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: 1.6rem;
+}
+
+p {
+  opacity: 0.9;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.upload-section {
+  margin-bottom: 20px;
+}
+
+input[type="file"] {
+  display: block;
+  margin: 10px auto;
+}
+
+.preview {
+  width: 100%;
+  height: 200px;
+  border: 2px dashed #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.preview img {
+  max-width: 100%;
+  max-height: 100%;
+  display: none;
+  border-radius: 10px;
+}
+
+button {
+  background: #00c6ff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #0072ff;
+}
+
+.result {
+  margin-top: 20px;
+  min-height: 50px;
+}
+
+#loading {
+  display: none;
+  font-weight: bold;
+  color: #00c6ff;
+}
+
+#captionText {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
   }
-});
-
-// Generate caption
-generateBtn.addEventListener("click", async () => {
-  if (!imageInput.files[0]) {
-    captionText.textContent = "⚠️ Please upload an image first.";
-    downloadBtn.style.display = "none";
-    return;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-
-  captionText.textContent = "";
-  loading.style.display = "block";
-  downloadBtn.style.display = "none";
-
-  // Simulating AI caption generation
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  const captions = [
-    "A masterpiece in pixels 🎨",
-    "When your camera accidentally takes a good photo 📸",
-    "Looks like a future meme template 😎",
-    "I see beauty, I see chaos, I see... art.",
-    "AI says: wow, that lighting tho 💡"
-  ];
-  const randomCaption = captions[Math.floor(Math.random() * captions.length)];
-
-  loading.style.display = "none";
-  captionText.textContent = randomCaption;
-
-  // Show download button
-  downloadBtn.style.display = "inline-block";
-});
-
-// Download image with caption
-downloadBtn.addEventListener("click", () => {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  const img = previewImage;
-
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight + 50; // extra space for caption
-
-  // Draw image
-  ctx.drawImage(img, 0, 0);
-
-  // Draw caption
-  ctx.fillStyle = "white";
-  ctx.font = "bold 30px Poppins, sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText(captionText.textContent, canvas.width / 2, canvas.height - 20);
-
-  // Download
-  const link = document.createElement("a");
-  link.download = "captioned-image.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-});
+}
